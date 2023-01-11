@@ -10,6 +10,8 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(HelloWorldController.class)
 class HelloWorldControllerTest {
@@ -20,14 +22,31 @@ class HelloWorldControllerTest {
 
     @Test
     void helloWorld() throws Exception {
-        // ACT: Make the request and get the result.
+        /*
+        ACT: Make the request and get the result.
+         */
         RequestBuilder request = MockMvcRequestBuilders
                 .get("/hello-rod")
                 .accept(MediaType.APPLICATION_JSON);
 
-        MvcResult result = mockMvc.perform(request).andReturn();
+        /*
+        ASSERT: check if content is as expected. There are 2 ways:
+        1) (preferred) Without assertEquals (straight from MvcResult)
+        2) With assertEquals
+         */
 
-        // ASSERT: check if content is as expected.
+        //region 2) With assertEquals
+        MvcResult result = mockMvc.perform(request).andReturn();
         assertEquals("Hello Rod", result.getResponse().getContentAsString());
+        //endregion
+
+        //region 1) Without assertEquals (preferred)
+        MvcResult mvcResult = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().string("Hello Rod"))
+                .andReturn();
+        //endregion
+
+
     }
 }
