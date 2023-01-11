@@ -14,18 +14,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest
 class ItemControllerTest {
 
-    // ARRANGE
+    /*
+    ARRANGE
+     */
     @Autowired
     private MockMvc mockMvc;
 
     @Test // Check if dummy item of id 1 with price of 12 is returned
     void dummyItem() throws Exception {
-        // ACT : create a request that accepts JSON
+        /*
+        ACT : create a request that accepts JSON
+         */
         RequestBuilder request = MockMvcRequestBuilders
                 .get("/dummyitem")
                 .accept(MediaType.APPLICATION_JSON);
 
-        // ASSERT: check if item returned is of id 1 with name of "london bus" and price of 12
+        /*
+        ASSERT: check if item returned is of id 1 with name of "london bus" and price of 12
+         */
         mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(content().json("{id: 1, name: \"london bus\", price: 12}"))
