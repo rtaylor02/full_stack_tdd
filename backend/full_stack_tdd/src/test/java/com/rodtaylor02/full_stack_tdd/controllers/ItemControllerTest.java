@@ -37,4 +37,24 @@ class ItemControllerTest {
                 .andExpect(content().json("{id: 1, name: \"london bus\", price: 12}"))
                 .andReturn();
     }
+
+    @Test // Check if dummy item returned is EXACTLY of id=1, name = "london bus", price=12, value=9. Order
+        // and spcaces are unchecked.
+    void dummyItem_strict() throws Exception {
+        /*
+        ACT : create a request that accepts JSON
+         */
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/dummyitem")
+                .accept(MediaType.APPLICATION_JSON);
+
+        /*
+        ASSERT: check exact match (except for element order and spaces),
+        if item returned is of id=1, name="london bus", price=12, value=9
+         */
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().json("{value: 9, id: 1, name: \"london bus\", price: 12}", true)) // OK: value property first
+                .andReturn();
+    }
 }
