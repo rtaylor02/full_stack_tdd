@@ -3,12 +3,13 @@ package com.rodtaylor02.full_stack_tdd.model;
 import lombok.*;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
 @NoArgsConstructor @AllArgsConstructor
 @Getter @ToString
-@Repository
+@Entity
 public class Item {
 
     @Id
