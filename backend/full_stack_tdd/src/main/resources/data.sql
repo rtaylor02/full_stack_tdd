@@ -1,0 +1,1 @@
+INSERT INTO item(id, name, price) VALUES(3, 'Grey flask', 20);
