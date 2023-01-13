@@ -11,6 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.Arrays;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,7 +25,7 @@ class ItemControllerTest {
      */
     @Autowired
     private MockMvc mockMvc;
-    @MockBean
+    @MockBean // To mock Autowired bean
     private ItemBusinessService itemBusinessService;
 
     @Test // Check if dummy item of id 1 with price of 12 is returned
@@ -82,5 +84,35 @@ class ItemControllerTest {
                 .andExpect(content().json("{ id: 2, name: \"Lego car\", price: 5, value: 3 }"))
                 .andReturn();
         //endregion
+    }
+
+    @Test
+    void getAllItemsFromItemBusinessService() throws Exception{
+        //region ARRANGE
+        when(itemBusinessService.retrieveAllItems()).thenReturn(
+                Arrays.asList(
+                        new Item(1, "Grey flask", 20, 3),
+                        new Item(2, "Green jumper", 40, 3),
+                        new Item(3, "Jumpy frog", 7, 3))
+        );
+        //endregion
+
+        //region ACT
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/allitemsbusinessservice")
+                .accept(MediaType.APPLICATION_JSON);
+        //endregion
+
+        //region ASSERT
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().json("[" +
+                        "{ id:1,name:\"Grey flask\", price: 20, value: 3 }," +
+                        "{ id:2,name:\"Green jumper\",price:40,value:3 }," +
+                        "{ id:3,name:\"Jumpy frog\",price:7,value:3 }" +
+                        "]"))
+                .andReturn();
+        //endregion
+
     }
 }
